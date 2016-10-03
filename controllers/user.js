@@ -44,7 +44,6 @@ exports.postFacebookUser = function(req, res, next) {
             user = new User();
             user.local.email = req.body.email;
             user.facebook.email= req.body.email;
-            user.local.password = user.generateHash(req.body.password);
             user.save(function(err) {
                 if (err)
                     res.send(err);
