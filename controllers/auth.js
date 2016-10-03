@@ -19,7 +19,7 @@ exports.authenticateLocal = function(req, res, next) {
                 res.send(err);
             }
             if (!user) {
-                res.send(401, 'Access invalid for user');
+                return res.json('Login or password is incorrect.');
             } else {
                 var localUser = user.local;
                 localUser.verifyPassword(password, function(err, isMatch) {
@@ -27,7 +27,7 @@ exports.authenticateLocal = function(req, res, next) {
                         res.send(err);
                     }
                     if (!isMatch) {
-                        res.send(401, 'Access invalid for user');
+                        return res.json('Login or password is incorrect.');
                     }
                     req.user = user;
                     next();
