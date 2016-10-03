@@ -19,9 +19,7 @@ exports.authenticateLocal = function(req, res, next) {
                 res.send(err);
             }
             if (!user) {
-                res.writeHead(401, 'Access invalid for user', {'Content-Type' : 'text/plain'});
-                res.end('Invalid credentials');
-                return res.json('Login or password is incorrect.');
+                res.send(401, 'Access invalid for user');
             } else {
                 var localUser = user.local;
                 localUser.verifyPassword(password, function(err, isMatch) {
@@ -29,9 +27,7 @@ exports.authenticateLocal = function(req, res, next) {
                         res.send(err);
                     }
                     if (!isMatch) {
-                        res.writeHead(401, 'Access invalid for user', {'Content-Type' : 'text/plain'});
-                        res.end('Invalid credentials');
-                        return res.json('Login or password is incorrect.');
+                        res.send(401, 'Access invalid for user');
                     }
                     req.user = user;
                     next();
