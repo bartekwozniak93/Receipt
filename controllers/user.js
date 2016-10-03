@@ -28,7 +28,30 @@ exports.getUser= function(req, res) {
         if (!user) {
             res.end('There is no user.');
         } else {
-            res.json(user);
+            res.json(user._id);
+        }
+    });
+};
+
+exports.postFacebookUser = function(req, res, next) {
+    User.findOne({ 'facebook.email': req.body.email }, function(err, user) {
+        if (err)
+            return done(err);
+        if (user) {
+            req.user = user;
+            next();
+        } else {
+            user = new User();
+            user.facebook.email = req.body.email;
+            user.facebook.password = user.generateHash(req.body.password);
+            user.save(function(err) {
+                if (err)
+                    res.send(err);
+
+                req.user = user;
+                next();
+            });
+
         }
     });
 };

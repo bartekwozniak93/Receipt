@@ -59,6 +59,8 @@ router.route('/local/login')
 router.route('/local/logout')
     .post(authController.isJWTAuthenticated, authController.logout);
 
+router.route('/facebook/login')
+    .post(userController.postFacebookUser, authController.generateToken)
 
 app.use('/api', router);
 var port = Number(process.env.PORT || 8081);
