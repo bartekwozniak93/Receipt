@@ -53,6 +53,9 @@ router.route('/local/users')
     .post(userController.postUsers, authController.generateToken)
     .get(authController.isJWTAuthenticated, userController.getUser);
 
+router.route('/local/find')
+    .post(authController.isJWTAuthenticated, userController.findUsers);
+
 router.route('/local/login')
     .post(authController.authenticateLocal, authController.generateToken);
 

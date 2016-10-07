@@ -33,6 +33,14 @@ exports.getUser= function(req, res) {
     });
 };
 
+exports.findUsers= function(req, res) {
+    User.find({ 'local.email': { $regex: req.body.email, $options: "i" } }, function(err, users) {
+        res.json(users);
+    });
+};
+
+
+
 exports.postFacebookUser = function(req, res, next) {
     User.findOne({ 'facebook.email': req.body.email }, function(err, user) {
         if (err)
