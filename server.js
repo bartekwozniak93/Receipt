@@ -11,7 +11,7 @@ var passport = require('passport');
  */
 var userController = require('./controllers/user');
 var authController = require('./controllers/auth');
-
+var eventController = require('./controllers/event');
 /*
  Load configuration from config.js
  */
@@ -61,6 +61,12 @@ router.route('/local/logout')
 
 router.route('/facebook/login')
     .post(userController.postFacebookUser, authController.generateToken)
+
+router.route('/event')
+    .post(authController.isJWTAuthenticated, eventController.newEvent);
+
+router.route('/event/adduser')
+    .post(authController.isJWTAuthenticated, eventController.addUserToEvent);
 
 app.use('/api', router);
 var port = Number(process.env.PORT || 8081);

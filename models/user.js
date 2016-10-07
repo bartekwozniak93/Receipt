@@ -17,7 +17,8 @@ var UserSchema = new mongoose.Schema({
         token: String,
         email: String,
         name: String
-    }
+    },
+    events: [ {type : mongoose.Schema.ObjectId, ref : 'Event'} ]
 });
 
 UserSchema.methods.generateHash = function(password) {
