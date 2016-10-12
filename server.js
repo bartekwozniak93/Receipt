@@ -66,7 +66,8 @@ router.route('/facebook/login')
     .post(userController.postFacebookUser, authController.generateToken)
 
 router.route('/event')
-    .post(authController.isJWTAuthenticated, eventController.newEvent);
+    .post(authController.isJWTAuthenticated, eventController.newEvent)
+    .get(authController.isJWTAuthenticated, eventController.getEvents);
 
 router.route('/event/adduser')
     .post(authController.isJWTAuthenticated, eventController.addUserToEvent);

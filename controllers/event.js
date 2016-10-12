@@ -26,3 +26,13 @@ exports.addUserToEvent = function(req, res) {
     });
 };
 
+exports.getEvents = function(req, res) {
+    Event.find({ 'users': req.user._id }, function(err, events) {
+        if (!events) {
+            res.json('There is no events.');
+        } else {
+            res.json(events);
+        }
+    });
+};
+
