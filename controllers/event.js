@@ -31,7 +31,7 @@ exports.getEvents = function(req, res) {
         if (!events) {
             res.json('There is no events.');
         } else {
-            res.json(events);
+            res.json({"events":events});
         }
     });
 };
