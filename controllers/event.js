@@ -23,9 +23,15 @@ exports.addUserToEvent = function(req, res) {
                 res.json('There is no events.');
             } else {
                 event.users.push({'local.email': req.body.userToAdd});
+                event.save(function(err) {
+                    if (err)
+                        console.log(err);
+                });
                 res.json(event);
             }
         });
+
+
 };
 
 exports.getEvents = function(req, res) {
