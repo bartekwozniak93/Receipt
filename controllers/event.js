@@ -36,12 +36,16 @@ exports.getEvents = function(req, res) {
     });
 };
 
+
+
 exports.getEvent = function(req, res) {
-    Event.find({ _id: req.body.eventId }, function(err, event) {
-        if (!event) {
-            res.json('There is no events.');
-        } else {
-            res.json({"event":event});
-        }
-    });
+    Event.find({ _id: req.body.eventId })
+        .populate('users')
+        .exec(function(err, event) {
+            if (!event) {
+                res.json('There is no events.');
+            } else {
+                res.json({"event":event});
+            }
+        });
 };
