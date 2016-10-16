@@ -25,7 +25,7 @@ exports.addUserToEvent = function(req, res) {
                 event.users.push({'local.email': req.body.userToAdd});
                 event.save(function(err) {
                     if (err)
-                        console.log(err);
+                        res.json(err);
                 });
                 res.json(event);
             }
