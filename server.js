@@ -72,6 +72,9 @@ router.route('/event')
 router.route('/event/adduser')
     .post(authController.isJWTAuthenticated, eventController.addUserToEvent);
 
+router.route('/getevent')
+    .post(authController.isJWTAuthenticated, eventController.getEvent);
+
 app.use('/api', router);
 var port = Number(process.env.PORT || 8081);
 app.listen(port);
