@@ -16,14 +16,16 @@ exports.newEvent = function(req, res) {
 };
 
 exports.addUserToEvent = function(req, res) {
-    Event.findOne({ _id: req.body.eventId }, function(err, event) {
-        if (!event) {
-            res.json('There is not such event.');
-        } else {
-            event.users.push({_id: req.user._id});
-            res.json(event);
-        }
-    });
+    Event.findOne({ _id: req.body.eventId })
+        .populate('users')
+        .exec(function(err, event) {
+            if (!event) {
+                res.json('There is no events.');
+            } else {
+                event.users.push({'local.email': req.body.userToAdd});
+                res.json(event);
+            }
+        });
 };
 
 exports.getEvents = function(req, res) {
