@@ -1,4 +1,5 @@
 var Event = require('../models/event');
+var User = require('../models/user');
 
 
 exports.newEvent = function(req, res) {
@@ -17,17 +18,23 @@ exports.newEvent = function(req, res) {
 
 exports.addUserToEvent = function(req, res) {
     Event.findOne({ _id: req.body.eventId })
-        .populate('users')
         .exec(function(err, event) {
             if (!event) {
                 res.json('There is no events.');
             } else {
-                event.users.push({'local.email': req.body.userToAdd});
-                event.save(function(err) {
-                    if (err)
-                        res.json(err);
-                });
-                res.json(event);
+                    User.findOne({ 'local.email': req.body.userToAdd }, function(err, user) {
+                        if (user) {
+                            event.users.push(user);
+                            event.save(function (err) {
+                                if (err)
+                                    res.json(err);
+                            });
+                            res.json(event);
+                        }
+                        else {
+                            res.json('There is no user.');
+                        }
+                    });
             }
         });
 
