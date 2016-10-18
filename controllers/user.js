@@ -38,16 +38,24 @@ exports.findUsers = function (req, res) {
     Event.findOne({_id: req.body.eventId})
         .populate('users._id')
         .exec(function (err, event) {
-            User.find({
-                $and: [{
-                    'local.email': {
-                        $regex: req.body.email,
-                        $options: "i"
+            if (!event || err || !event.users) {
+                res.json('');
+            }
+            else {
+                User.find({
+                    $and: [{
+                        'local.email': {
+                            $regex: req.body.email,
+                            $options: "i"
+                        }
+                    }, {_id: {$nin: event.users}}]
+                }, function (err, users) {
+                    if (!users || err) {
+                        res.json('');
                     }
-                }, {_id: {$nin: event.users}}]
-            }, function (err, users) {
-                res.json(users);
-            });
+                    res.json(users);
+                });
+            }
         });
 };
 
