@@ -12,6 +12,7 @@ var passport = require('passport');
 var userController = require('./controllers/user');
 var authController = require('./controllers/auth');
 var eventController = require('./controllers/event');
+var receiptController = require('./controllers/receipt');
 /*
  Load configuration from config.js
  */
@@ -74,6 +75,9 @@ router.route('/event/adduser')
 
 router.route('/getevent')
     .post(authController.isJWTAuthenticated, eventController.getEvent);
+
+router.route('/receipt')
+    .post(authController.isJWTAuthenticated, receiptController.newReceipt)
 
 app.use('/api', router);
 var port = Number(process.env.PORT || 8081);

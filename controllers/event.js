@@ -13,7 +13,6 @@ exports.newEvent = function(req, res) {
             });
             event.users.push({_id:req.user._id})
     res.json(event);
-
 };
 
 exports.addUserToEvent = function(req, res) {
