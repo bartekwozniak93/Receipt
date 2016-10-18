@@ -1,4 +1,5 @@
 var User = require('../models/user');
+var Event = require('../models/event');
 var config = require('../config');
 
 exports.postUsers = function(req, res, next) {
@@ -34,9 +35,13 @@ exports.getUser= function(req, res) {
 };
 
 exports.findUsers= function(req, res) {
-    User.find({ 'local.email': { $regex: req.body.email, $options: "i" } }, function(err, users) {
-        res.json(users);
-    });
+    Event.find({ _id: req.body.eventId })
+        .populate('users')
+        .exec(function(err, event) {
+            User.find({ 'local.email': { $regex: req.body.email, $options: "i" }, _id: { $nin: [event._id] }}, function(err, users) {
+                res.json(users);
+            });
+        });
 };
 
 
