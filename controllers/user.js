@@ -34,15 +34,23 @@ exports.getUser= function(req, res) {
     });
 };
 
-exports.findUsers= function(req, res) {
-    Event.find({ _id: req.body.eventId })
+exports.findUsers = function (req, res) {
+    Event.find({_id: req.body.eventId})
         .populate('users')
-        .exec(function(err, event) {
-            User.find({ 'local.email': { $regex: req.body.email, $options: "i" }, _id: { $nin: [event._id] }}, function(err, users) {
+        .exec(function (err, event) {
+            User.find({
+                $and: [{
+                    'local.email': {
+                        $regex: req.body.email,
+                        $options: "i"
+                    }
+                }, {_id: {$nin: [event._id]}}]
+            }, function (err, users) {
                 res.json(users);
             });
         });
 };
+
 
 
 
