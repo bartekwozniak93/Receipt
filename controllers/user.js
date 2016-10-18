@@ -35,8 +35,8 @@ exports.getUser= function(req, res) {
 };
 
 exports.findUsers = function (req, res) {
-    Event.find({_id: req.body.eventId})
-        .populate('users')
+    Event.findOne({_id: req.body.eventId})
+        .populate('users._id')
         .exec(function (err, event) {
             User.find({
                 $and: [{
@@ -44,7 +44,7 @@ exports.findUsers = function (req, res) {
                         $regex: req.body.email,
                         $options: "i"
                     }
-                }, {_id: {$nin: [event._id]}}]
+                }, {_id: {$nin: event.users}}]
             }, function (err, users) {
                 res.json(users);
             });
