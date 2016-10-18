@@ -10,7 +10,7 @@ exports.newReceipt = function(req, res) {
     receipt.save(function(err) {
         if (err)
             console.log(err);
+        res.json(receipt);
     });
-    res.json(receipt);
 };
 
