@@ -7,9 +7,8 @@ exports.newReceipt = function(req, res) {
     receipt.eventId=req.body.eventId;
     receipt.description=req.body.description;
     receipt.total=req.body.total;
-    req.body.users.forEach(function(value){
-        receipt.users.push(value);
-    });
+        receipt.users.push(req.body.users[0]);
+
     receipt.save(function(err) {
         if (err)
             console.log(err);
