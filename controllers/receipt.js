@@ -41,7 +41,7 @@ exports.getReceipt = function (req, res) {
                     .populate('users')
                     .exec(function (err, event) {
                         if (event) {
-                            res.json({"receipt": receipt, "users": [event.users]});
+                            res.json({"receipt": receipt, "users": event.users});
                         } else {
                             res.json({"receipt": receipt, "users":[]});
                         }
