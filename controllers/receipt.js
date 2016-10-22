@@ -7,8 +7,8 @@ exports.newReceipt = function(req, res) {
     receipt.eventId=req.body.eventId;
     receipt.description=req.body.description;
     receipt.total=req.body.total;
-    var a =JSON.stringify(req.body.users);
-    receipt.users.push(a[0]);
+    var arr = JSON.parse(req.body.users);
+    receipt.users.push(arr[0]);
 
     receipt.save(function(err) {
         if (err)
