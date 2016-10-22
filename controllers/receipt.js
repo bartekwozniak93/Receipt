@@ -8,8 +8,9 @@ exports.newReceipt = function(req, res) {
     receipt.description=req.body.description;
     receipt.total=req.body.total;
     var arr = JSON.parse(req.body.users);
-    receipt.users.concat(arr);
-
+    for(var i = 0; i<arr.length; i++) {
+        receipt.users.push(arr[i]);
+    }
     receipt.save(function(err) {
         if (err)
             console.log(err);
