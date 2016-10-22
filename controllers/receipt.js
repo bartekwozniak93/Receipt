@@ -43,7 +43,7 @@ exports.getReceipt = function (req, res) {
                         if (event) {
                             res.json({"receipt": receipt, "users": event.users});
                         } else {
-                            res.json({"receipt": receipt});
+                            res.json({"receipt": receipt, "users":[]});
                         }
                     });
             }
