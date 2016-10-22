@@ -1,4 +1,5 @@
 var Receipt = require('../models/receipt');
+var Event = require('../models/event');
 
 exports.newReceipt = function(req, res) {
     var receipt = new Receipt();
@@ -29,14 +30,22 @@ exports.getReceipts = function(req, res) {
 };
 
 
-exports.getReceipt = function(req, res) {
+exports.getReceipt = function (req, res) {
     Receipt.findOne({_id: req.body.receiptId})
         .populate('users')
         .exec(function (err, receipt) {
             if (!receipt) {
-                res.json('There is no receipts.');
+                res.json('There is no receipt.');
             } else {
-                res.json({"receipt":receipt});
+                Event.find({_id: receipt.eventId})
+                    .populate('users')
+                    .exec(function (err, event) {
+                        if (event) {
+                            res.json({"receipt": receipt, "users": event.users});
+                        } else {
+                            res.json({"receipt": receipt});
+                        }
+                    });
             }
         });
 };
