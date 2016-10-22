@@ -37,7 +37,7 @@ exports.getReceipt = function (req, res) {
             if (!receipt) {
                 res.json('There is no receipt.');
             } else {
-                Event.find({_id: reg.body.eventId})
+                Event.findOne({_id: receipt.eventId})
                     .populate('users')
                     .exec(function (err, event) {
                         if (event) {
