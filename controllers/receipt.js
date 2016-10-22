@@ -41,7 +41,7 @@ exports.getReceipt = function(req, res) {
 
 exports.editReceipt = function(req, res) {
     Receipt.findOne({ _id: req.body.receiptId }, function(err, receipt) {
-        if (!receips) {
+        if (!receipt) {
             receipt.title=req.body.title;
             receipt.date=req.body.date;
             receipt.eventId=req.body.eventId;
