@@ -39,5 +39,27 @@ exports.getReceipt = function(req, res) {
     });
 };
 
-
+exports.editReceipt = function(req, res) {
+    Receipt.findOne({ _id: req.body.receiptId }, function(err, receipt) {
+        if (!receips) {
+            receipt.title=req.body.title;
+            receipt.date=req.body.date;
+            receipt.eventId=req.body.eventId;
+            receipt.description=req.body.description;
+            receipt.total=req.body.total;
+            receipt.users=[];
+            var arr = JSON.parse(req.body.users);
+            for(var i = 0; i<arr.length; i++) {
+                receipt.users.push(arr[i]);
+            }
+            receipt.save(function(err) {
+                if (err)
+                    console.log(err);
+                res.json(receipt);
+            });
+        } else {
+            res.json({"receipt":receipt});
+        }
+    });
+};
 

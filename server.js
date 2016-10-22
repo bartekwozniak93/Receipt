@@ -85,7 +85,8 @@ router.route('/receipts')
 router.route('/getreceipt')
     .post(authController.isJWTAuthenticated, receiptController.getReceipt);
 
-
+router.route('/editreceipt')
+    .post(authController.isJWTAuthenticated, receiptController.editReceipt);
 
 
 app.use('/api', router);
