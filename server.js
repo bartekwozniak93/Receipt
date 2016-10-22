@@ -79,6 +79,9 @@ router.route('/getevent')
 router.route('/receipt')
     .post(authController.isJWTAuthenticated, receiptController.newReceipt)
 
+router.route('/receipts')
+    .post(authController.isJWTAuthenticated, receiptController.getReceipts)
+
 app.use('/api', router);
 var port = Number(process.env.PORT || 8081);
 app.listen(port);
