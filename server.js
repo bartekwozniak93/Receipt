@@ -64,7 +64,7 @@ router.route('/local/logout')
     .post(authController.isJWTAuthenticated, authController.logout);
 
 router.route('/facebook/login')
-    .post(userController.postFacebookUser, authController.generateToken)
+    .post(userController.postFacebookUser, authController.generateToken);
 
 router.route('/event')
     .post(authController.isJWTAuthenticated, eventController.newEvent)
@@ -77,10 +77,16 @@ router.route('/getevent')
     .post(authController.isJWTAuthenticated, eventController.getEvent);
 
 router.route('/receipt')
-    .post(authController.isJWTAuthenticated, receiptController.newReceipt)
+    .post(authController.isJWTAuthenticated, receiptController.newReceipt);
 
 router.route('/receipts')
-    .post(authController.isJWTAuthenticated, receiptController.getReceipts)
+    .post(authController.isJWTAuthenticated, receiptController.getReceipts);
+
+router.route('/getReceipt')
+    .post(authController.isJWTAuthenticated, receiptController.getReceipt);
+
+
+
 
 app.use('/api', router);
 var port = Number(process.env.PORT || 8081);
