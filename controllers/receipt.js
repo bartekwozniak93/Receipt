@@ -31,7 +31,7 @@ exports.getReceipts = function(req, res) {
 
 exports.getReceipt = function(req, res) {
     Receipt.findOne({ _id: req.body.receiptId }, function(err, receipt) {
-        if (!receips) {
+        if (!receipt) {
             res.json('There is no receipts.');
         } else {
             res.json({"receipt":receipt});
