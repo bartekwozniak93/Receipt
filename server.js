@@ -82,7 +82,7 @@ router.route('/receipt')
 router.route('/receipts')
     .post(authController.isJWTAuthenticated, receiptController.getReceipts);
 
-router.route('/getReceipt')
+router.route('/getreceipt')
     .post(authController.isJWTAuthenticated, receiptController.getReceipt);
 
 
