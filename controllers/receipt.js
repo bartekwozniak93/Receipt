@@ -15,7 +15,7 @@ exports.newReceipt = function(req, res) {
 };
 
 exports.getReceipts = function(req, res) {
-    Receipt.find({ eventId: req.eventId }, function(err, receipts) {
+    Receipt.find({ eventId: req.body.eventId }, function(err, receipts) {
         if (!receipts) {
             res.json('There is no receipts.');
         } else {
