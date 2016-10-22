@@ -43,7 +43,7 @@ exports.getReceipt = function(req, res) {
 
 exports.editReceipt = function(req, res) {
     Receipt.findOne({ _id: req.body.receiptId }, function(err, receipt) {
-        if (!receipt) {
+        if (receipt) {
             receipt.title=req.body.title;
             receipt.date=req.body.date;
             receipt.eventId=req.body.eventId;
@@ -57,10 +57,10 @@ exports.editReceipt = function(req, res) {
             receipt.save(function(err) {
                 if (err)
                     console.log(err);
-                res.json(receipt);
+                res.json({"receipt":receipt});
             });
         } else {
-            res.json({"receipt":receipt});
+            res.json('There is no receipt.');
         }
     });
 };
