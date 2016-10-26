@@ -5,13 +5,15 @@ exports.newReceipt = function(req, res) {
     var receipt = new Receipt();
     receipt.title=req.body.title;
     receipt.date=req.body.date;
-    receipt.userId= "a";
+    receipt.userId= req.user._id;
     receipt.eventId=req.body.eventId;
     receipt.description=req.body.description;
     receipt.total=req.body.total;
-    var arr = JSON.parse(req.body.users);
-    for(var i = 0; i<arr.length; i++) {
-        receipt.users.push(arr[i]);
+    if(req.body.users!=undefined) {
+        var arr = JSON.parse(req.body.users);
+        for (var i = 0; i < arr.length; i++) {
+            receipt.users.push(arr[i]);
+        }
     }
     receipt.save(function(err) {
         if (err)
