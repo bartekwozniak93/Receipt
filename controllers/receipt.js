@@ -5,6 +5,7 @@ exports.newReceipt = function(req, res) {
     var receipt = new Receipt();
     receipt.title=req.body.title;
     receipt.date=req.body.date;
+    receipt.userId= req.user._id;
     receipt.eventId=req.body.eventId;
     receipt.description=req.body.description;
     receipt.total=req.body.total;
@@ -72,3 +73,37 @@ exports.editReceipt = function(req, res) {
     });
 };
 
+
+exports.getBalance = function (req, res) {////
+    Receipt.find({eventId: req.body.eventId})
+        .populate('users')
+        .exec(function (err, receipts) {
+            if (!receipts) {
+                res.json('There are no receipt.');
+            } else {
+                Event.findOne({_id: req.body.eventId})
+                    .populate('users')
+                    .exec(function (err, event) {
+                        var usersToSplit = new Array();
+                        var balance={};
+                        var temp;
+                        for(var i = 0; i<event.users.length; i++) {
+                            for(var j = 0; j<event.users.length; j++) {
+                                temp = {};
+                                temp[event.users[i]._id]=0;
+                                balance[event.users[j]._id] = temp;
+                            }
+                        }
+
+                        for(var i = 0; i<receipts.length; i++) {
+                            for(var j = 0; j<receipts[i].users.length; j++) {
+                                balance[receipts[i].userId][receipts[i].users[j]._id] =1;
+                            }
+                        }
+
+
+                        res.json(balance);
+                    });
+            }
+        });
+};//
