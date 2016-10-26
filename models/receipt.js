@@ -4,7 +4,7 @@ var ReceiptSchema = new mongoose.Schema({
     date: String,
     description: String,
     total: Number,
-    userId: {type: mongoose.Schema.ObjectId, ref: 'User'},
+    userId: String,
     eventId: {type: mongoose.Schema.ObjectId, ref: 'Event'},
     users: [{type: mongoose.Schema.ObjectId, ref: 'User', unique: true}]
 });
