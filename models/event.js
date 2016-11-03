@@ -3,7 +3,7 @@ var EventSchema = new mongoose.Schema({
     title: String,
     date: String,
     description: String,
-    users: [ {type : mongoose.Schema.ObjectId, ref : 'User', unique: true} ]
+    users: [ {type : mongoose.Schema.ObjectId, "ref" : 'User', "unique": true} ]
 });
 
 

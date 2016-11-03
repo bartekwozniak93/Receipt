@@ -40,6 +40,7 @@ exports.addUserToEvent = function(req, res) {
 
 };
 
+
 exports.getEvents = function(req, res) {
     Event.find({ 'users': req.user._id }, function(err, events) {
         if (!events) {
@@ -63,3 +64,4 @@ exports.getEvent = function(req, res) {
             }
         });
 };
+

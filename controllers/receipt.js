@@ -90,16 +90,18 @@ exports.getBalance = function (req, res) {////
                         var balance={};
                         var temp;
                         for(var i = 0; i<event.users.length; i++) {
+                            balance[event.users[i]._id] =[];
                             for(var j = 0; j<event.users.length; j++) {
-                                temp = {};
-                                temp[event.users[i]._id]=0;
-                                balance[event.users[j]._id] = temp;
+                                temp={};
+                                temp[event.users[j]._id]=0;
+                                balance[event.users[i]._id].push(temp);
                             }
                         }
-
+                        res.json(balance);
                         for(var i = 0; i<receipts.length; i++) {
                             for(var j = 0; j<receipts[i].users.length; j++) {
-                                balance[receipts[i].userId][receipts[i].users[j]._id] =1;
+                                var totalToSplit= receipts[i].total / receipts[i].users.length;
+                                balance[receipts[i].userId][receipts[i].users[j]._id] +=totalToSplit;
                             }
                         }
 
