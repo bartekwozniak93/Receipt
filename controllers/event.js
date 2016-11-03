@@ -19,7 +19,7 @@ exports.addUserToEvent = function(req, res) {
     Event.findOne({ _id: req.body.eventId })
         .exec(function(err, event) {
             if (!event) {
-                res.json('There is no events.');
+                res.json('QrCode is incorrect.');
             } else {
                     User.findOne({ 'local.email': req.body.userToAdd }, function(err, user) {
                         if (user) {
@@ -31,7 +31,7 @@ exports.addUserToEvent = function(req, res) {
                                 }
                             }
                             if(result) {
-                                res.json('Event is already added!');
+                                res.json('Event is already added.');
                             }
                             else {
                                 event.users.push(user);
@@ -39,11 +39,11 @@ exports.addUserToEvent = function(req, res) {
                                     if (err)
                                         res.json(err);
                                 });
-                                res.json(event);
+                                res.json(event.title+' added successfully.');
                             }
                         }
                         else {
-                            res.json('There is no user.');
+                            res.json('Internal error.');
                         }
                     });
             }
