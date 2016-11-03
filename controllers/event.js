@@ -23,6 +23,8 @@ exports.addUserToEvent = function(req, res) {
             } else {
                     User.findOne({ 'local.email': req.body.userToAdd }, function(err, user) {
                         if (user) {
+                            if(event.users.indexOf(user) >= 0)
+                                res.json('Event is already added!');
                             event.users.push(user);
                             event.save(function (err) {
                                 if (err)
