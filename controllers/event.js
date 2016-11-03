@@ -31,7 +31,7 @@ exports.addUserToEvent = function(req, res) {
                                 }
                             }
                             if(result) {
-                                res.json('Event is already added.');
+                                res.json('Event: '+event.title+' is already added.');
                             }
                             else {
                                 event.users.push(user);
@@ -39,7 +39,7 @@ exports.addUserToEvent = function(req, res) {
                                     if (err)
                                         res.json(err);
                                 });
-                                res.json(event.title+' added successfully.');
+                                res.json('Event: '+event.title+' added successfully.');
                             }
                         }
                         else {
