@@ -23,14 +23,24 @@ exports.addUserToEvent = function(req, res) {
             } else {
                     User.findOne({ 'local.email': req.body.userToAdd }, function(err, user) {
                         if (user) {
-                            if(event.users.indexOf(user) >= 0)
+                            var result = false;
+                            for(var i = 0; i<event.users.length; i++) {
+                                if(event.users[i].equals(user._id)) {
+                                    result = true;
+                                    break;
+                                }
+                            }
+                            if(result) {
                                 res.json('Event is already added!');
-                            event.users.push(user);
-                            event.save(function (err) {
-                                if (err)
-                                    res.json(err);
-                            });
-                            res.json(event);
+                            }
+                            else {
+                                event.users.push(user);
+                                event.save(function (err) {
+                                    if (err)
+                                        res.json(err);
+                                });
+                                res.json(event);
+                            }
                         }
                         else {
                             res.json('There is no user.');
