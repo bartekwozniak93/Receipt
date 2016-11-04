@@ -88,8 +88,12 @@ router.route('/getreceipt')
 router.route('/editreceipt')
     .post(authController.isJWTAuthenticated, receiptController.editReceipt);
 
-router.route('/getbalance')
-    .post(authController.isJWTAuthenticated, receiptController.getBalance);
+router.route('/getEventBalance')
+    .post(authController.isJWTAuthenticated, receiptController.getEventBalance);
+
+router.route('/getUserBalance')
+    .post(authController.isJWTAuthenticated, receiptController.getUserBalance);
+
 
 app.use('/api', router);
 var port = Number(process.env.PORT || 8081);

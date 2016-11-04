@@ -2,11 +2,10 @@ var Receipt = require('../models/receipt');
 var Event = require('../models/event');
 
 exports.newReceipt = function (req, res) {
-    var ObjectId = require('mongoose').Types.ObjectId;
     var receipt = new Receipt();
     receipt.title = req.body.title;
     receipt.date = req.body.date;
-    receipt.userId = new ObjectId(req.user._id);
+    receipt.userId = req.user._id;
     receipt.eventId = req.body.eventId;
     receipt.description = req.body.description;
     receipt.total = req.body.total;
@@ -77,37 +76,47 @@ exports.editReceipt = function (req, res) {
 };
 
 
-exports.getBalance = function (req, res) {////
+exports.getEventBalance = function (req, res) {
     Receipt.find({eventId: req.body.eventId})
-        .populate('users', 'userId')
+        .populate([{
+            path: 'userId',
+            model: 'User'
+        }, {
+            path: 'users',
+            model: 'User'
+        }])
         .exec(function (err, receipts) {
             if (!receipts) {
                 res.json('There are no receipt.');
             } else {
                 Event.findOne({_id: req.body.eventId})
-                    .populate('users')
+                    .populate({
+                        path: 'users',
+                        model: 'User'
+                    })
                     .exec(function (err, event) {
                         if (!event)
                             res.json("There is no such event");
                         else {
                             var balance = {};
                             for (var i = 0; i < event.users.length; i++) {
-                                balance[event.users[i]._id] = {};
-                                balance[event.users[i]._id]['spent'] = 0;
-                                balance[event.users[i]._id]['cost'] = 0;
-                                balance[event.users[i]._id]['balance'] = {};
+                                balance[event.users[i].local.email] = {};
+                                balance[event.users[i].local.email]['spent'] = 0;
+                                balance[event.users[i].local.email]['cost'] = 0;
+                                balance[event.users[i].local.email]['balance'] = {};
                                 for (var j = 0; j < event.users.length; j++) {
-                                    balance[event.users[i]._id]['balance'][event.users[j]._id] = 0;
+                                    balance[event.users[i].local.email]['balance'][event.users[j].local.email] = 0;
 
                                 }
                             }
                             for (var i = 0; i < receipts.length; i++) {
-                                balance[receipts[i].userId]['spent'] += receipts[i].total;
+                                balance[receipts[i].userId.local.email]['spent'] += receipts[i].total;
                                 var totalToSplit = receipts[i].total / receipts[i].users.length;
                                 for (var j = 0; j < receipts[i].users.length; j++) {
                                     if (!receipts[i].userId.equals(receipts[i].users[j]._id)) {
-                                        balance[receipts[i].userId]['balance'][receipts[i].users[j]._id] += totalToSplit;
-                                        balance[receipts[i].users[j]._id]['cost'] += totalToSplit;
+                                        balance[receipts[i].userId.local.email]['balance'][receipts[i].users[j].local.email] += totalToSplit;
+                                        balance[receipts[i].users[j].local.email]['balance'][receipts[i].userId.local.email] -= totalToSplit;
+                                        balance[receipts[i].users[j].local.email]['cost'] += totalToSplit;
                                     }
                                 }
                             }
@@ -115,5 +124,47 @@ exports.getBalance = function (req, res) {////
                         }
                     });
             }
+        });
+};
+
+exports.getUserBalance = function (req, res) {
+    Receipt.find({ $or: [ { users: req.user._id }, { userId: req.user._id } ] })
+        .populate([{
+            path: 'eventId',
+            model: 'Event'
+        }, {
+            path: 'users',
+            model: 'User'
+        }])
+        .exec(function (err, receipts) {
+            var balance = {};
+            for (var i = 0; i < receipts.length; i++) {
+                if(balance[receipts[i].eventId._id] == undefined) {
+                    balance[receipts[i].eventId._id] = {};
+                    balance[receipts[i].eventId._id]['balance']=0;
+                    balance[receipts[i].eventId._id]['title'] =receipts[i].eventId.title;
+                }
+
+                var totalToSplit = receipts[i].total / receipts[i].users.length;
+                if(!receipts[i].userId.equals(req.user._id)) {
+                    balance[receipts[i].eventId._id]['balance'] -= totalToSplit;
+                }
+                else{
+                    var isUserSplittingCost=false;
+                    for(var k = 0; k<receipts[i].users.length; k++) {
+                        if (receipts[i].users[k]._id.equals(req.user._id)) {
+                            isUserSplittingCost = true;
+                            break;
+                        }
+                    }
+                    if(isUserSplittingCost) {
+                        balance[receipts[i].eventId._id]['balance'] += (receipts[i].total-totalToSplit);
+                    }
+                    else {
+                        balance[receipts[i].eventId._id]['balance'] +=receipts[i].total;
+                    }
+                }
+            }
+            res.json(balance);
         });
 };
