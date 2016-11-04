@@ -98,7 +98,7 @@ exports.getEventBalance = function (req, res) {
                         if (!event)
                             res.json("There is no such event");
                         else {
-                            var balance = [];
+                            var balance = {};
                             for (var i = 0; i < event.users.length; i++) {
                                 balance[event.users[i].local.email] = {};
                                 balance[event.users[i].local.email]['spent'] = 0;
@@ -113,7 +113,7 @@ exports.getEventBalance = function (req, res) {
                                 balance[receipts[i].userId.local.email]['spent'] += receipts[i].total;
                                 var totalToSplit = receipts[i].total / receipts[i].users.length;
                                 for (var j = 0; j < receipts[i].users.length; j++) {
-                                    if (!receipts[i].userId.equals(receipts[i].users[j]._id)) {
+                                    if (!receipts[i].userId._id.equals(receipts[i].users[j]._id)) {
                                         balance[receipts[i].userId.local.email]['balance'][receipts[i].users[j].local.email] += totalToSplit;
                                         balance[receipts[i].users[j].local.email]['balance'][receipts[i].userId.local.email] -= totalToSplit;
                                         balance[receipts[i].users[j].local.email]['cost'] += totalToSplit;
