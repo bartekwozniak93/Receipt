@@ -7,6 +7,8 @@ exports.newEvent = function(req, res) {
             event.title=req.body.title;
             event.date=req.body.date;
             event.description=req.body.description;
+            event.latitude=req.body.latitude;
+            event.longitude=req.body.longitude;
             event.save(function(err) {
                 if (err)
                     console.log(err);
